@@ -1,7 +1,6 @@
 use anyhow::Error as AnyError;
-use std::io::Read;
 
-fn as_u32_be(array: &[u8]) -> u32 {
+fn as_u32_be(array: &[u8; 4]) -> u32 {
     ((array[0] as u32) << 24)
         + ((array[1] as u32) << 16)
         + ((array[2] as u32) << 8)
@@ -54,7 +53,20 @@ trait IpAnalyze {
 
 impl IpAnalyze for IP {
     fn compute_ip_range(&self) -> (u32, u32) {
-        todo!()
+        let mut idx: u32 = 0;
+        for i in 3..0 {
+            if i == 0 {
+                continue;
+            } else {
+                idx = i;
+                break;
+            }
+        }
+        let num = idx.trailing_zeros();
+        let mut max = self.bytes.clone();
+        assert!(idx < 4);
+        max[idx as usize] = ((1 << num) - 1) | self.bytes[idx as usize];
+        (as_u32_be(&self.bytes), as_u32_be(&max))
     }
 }
 
