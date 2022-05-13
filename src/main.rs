@@ -23,8 +23,7 @@ impl<'a> TryFrom<&'a str> for IP {
                 .collect::<Vec<&str>>()
                 .into_iter()
                 .map(|a| a.parse::<u8>().ok())
-                .filter(|a| a.is_some())
-                .map(|a| a.unwrap())
+                .filter_map(|a| a)
                 .collect();
             if nums.len() == 4 {
                 let s = nums.as_slice();
@@ -51,22 +50,28 @@ trait IpAnalyze {
     fn compute_ip_range(&self) -> (u32, u32);
 }
 
+trait IntoU32 {
+    fn into_u32(&self) -> u32;
+}
+
+impl IntoU32 for &[u8; 4] {
+    fn into_u32(&self) -> u32 {
+        ((self[0] as u32) << 24)
+            + ((self[1] as u32) << 16)
+            + ((self[2] as u32) << 8)
+            + (self[3] as u32)
+    }
+}
+
 impl IpAnalyze for IP {
     fn compute_ip_range(&self) -> (u32, u32) {
-        let mut idx: u32 = 0;
-        for i in 3..0 {
-            if i == 0 {
-                continue;
-            } else {
-                idx = i;
-                break;
-            }
-        }
-        let num = idx.trailing_zeros();
-        let mut max = self.bytes.clone();
-        assert!(idx < 4);
-        max[idx as usize] = ((1 << num) - 1) | self.bytes[idx as usize];
-        (as_u32_be(&self.bytes), as_u32_be(&max))
+        let i = (1u32 << (32 - self.subnet)) - 1;
+        println!(
+            "Subnet number binary representation: {:32}",
+            format!("{:b}", i)
+        );
+        let min: u32 = (&self.bytes).into_u32();
+        (min & (!i), i ^ min)
     }
 }
 
@@ -78,8 +83,8 @@ impl DisplayIp for u32 {
     fn display_ip(&self) -> String {
         let bytes = self.to_be_bytes();
         let mut ip = String::new();
-        for i in bytes {
-            ip.push_str(format!("{}", i).as_str());
+        for (i, b) in bytes.into_iter().enumerate() {
+            ip.push_str(format!("{}", b).as_str());
             if i < 3 {
                 ip.push_str(".")
             }
@@ -89,11 +94,12 @@ impl DisplayIp for u32 {
 }
 
 fn main() -> Result<(), AnyError> {
-    let ip: IP = "173.245.48.0/20".try_into()?;
+    let ip: IP = "192.168.32.1/24".try_into()?;
     let (min, max) = ip.compute_ip_range();
+    println!("min:{}, max:{}", min.display_ip(), max.display_ip());
 
     for (i, ip) in (min + 1..max).into_iter().enumerate() {
-        println!("Number {:3} ip: {}", i, ip.display_ip());
+        println!("Number {:3} ip: {}", i + 1, ip.display_ip());
     }
-    todo!()
+    Ok(())
 }
