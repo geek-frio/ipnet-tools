@@ -7,3 +7,16 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.13"
+fastping-rs = "0.2"
+egui = { version = "0.18.0", default-features = false }
+egui_extras = { version = "0.18.0" }
+enum-map = { version = "2", features = ["serde"] }
+eframe = "0.18.0"
+tracing = "0.1"
+unicode_names2 = { version = "0.5.0", default-features = false }
+
+[[bin]]
+name = "gui"
+
+[[bin]]
+name = "cmd"

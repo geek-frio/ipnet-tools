@@ -7,7 +7,7 @@ fn as_u32_be(array: &[u8; 4]) -> u32 {
         + (array[3] as u32)
 }
 
-struct IP {
+pub struct IP {
     bytes: [u8; 4],
     subnet: usize,
 }
@@ -46,11 +46,11 @@ impl<'a> TryFrom<&'a str> for IP {
     }
 }
 
-trait IpAnalyze {
+pub trait IpAnalyze {
     fn compute_ip_range(&self) -> (u32, u32);
 }
 
-trait IntoU32 {
+pub trait IntoU32 {
     fn into_u32(&self) -> u32;
 }
 
@@ -75,7 +75,7 @@ impl IpAnalyze for IP {
     }
 }
 
-trait DisplayIp {
+pub trait DisplayIp {
     fn display_ip(&self) -> String;
 }
 
@@ -91,15 +91,4 @@ impl DisplayIp for u32 {
         }
         ip
     }
-}
-
-fn main() -> Result<(), AnyError> {
-    let ip: IP = "192.168.32.1/24".try_into()?;
-    let (min, max) = ip.compute_ip_range();
-    println!("min:{}, max:{}", min.display_ip(), max.display_ip());
-
-    for (i, ip) in (min + 1..max).into_iter().enumerate() {
-        println!("Number {:3} ip: {}", i + 1, ip.display_ip());
-    }
-    Ok(())
 }
