@@ -175,27 +175,27 @@ impl App for TestEditApp {
         //             if ui.button("on the same row!").clicked() { /* … */ }
         //         });
         //     });
-        one.call_once(|| {
-            let mut fonts = FontDefinitions::default();
-            fonts.font_data.insert(
-                "wenquan".to_owned(),
-                FontData::from_static(include_bytes!("/tmp/wenquan.ttf")),
-            );
-            fonts
-                .families
-                .get_mut(&FontFamily::Proportional)
-                .unwrap()
-                .insert(0, "wenquan".to_owned());
-            fonts
-                .families
-                .get_mut(&FontFamily::Monospace)
-                .unwrap()
-                .push("wenquan".to_owned());
-            ctx.set_fonts(fonts);
-        });
-        egui::CentralPanel::default().show(ctx, |ui| {
-            self.text_edit.ui(ui);
-        });
+        // one.call_once(|| {
+        //     let mut fonts = FontDefinitions::default();
+        //     fonts.font_data.insert(
+        //         "wenquan".to_owned(),
+        //         FontData::from_static(include_bytes!("/tmp/wenquan.ttf")),
+        //     );
+        //     fonts
+        //         .families
+        //         .get_mut(&FontFamily::Proportional)
+        //         .unwrap()
+        //         .insert(0, "wenquan".to_owned());
+        //     fonts
+        //         .families
+        //         .get_mut(&FontFamily::Monospace)
+        //         .unwrap()
+        //         .push("wenquan".to_owned());
+        //     ctx.set_fonts(fonts);
+        // });
+        // egui::CentralPanel::default().show(ctx, |ui| {
+        //     self.text_edit.ui(ui);
+        // });
     }
 }
 

@@ -1,4 +1,5 @@
 use anyhow::Error as AnyError;
+use regex::Regex;
 
 fn as_u32_be(array: &[u8; 4]) -> u32 {
     ((array[0] as u32) << 24)
@@ -73,6 +74,11 @@ impl IpAnalyze for IP {
         let min: u32 = (&self.bytes).into_u32();
         (min & (!i), i ^ min)
     }
+}
+
+pub fn is_ip_fmt(s: &str) -> bool {
+    let re = Regex::new(r"\d+\.\d+\.\d+\.\d+").unwrap();
+    re.is_match(s)
 }
 
 pub trait DisplayIp {
