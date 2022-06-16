@@ -12,10 +12,10 @@ egui = { version = "0.18.0", default-features = false }
 egui_extras = { version = "0.18.0" }
 enum-map = { version = "2", features = ["serde"] }
 eframe = "0.18.0"
-tracing = "0.1"
 unicode_names2 = { version = "0.5.0", default-features = false }
 clap = {version = "3.0.9", features = ["derive"]}
-tracing-subscriber = "0.2"
+tracing = "0.1.5"
+tracing-subscriber = { version = "0.3.11", features = ["fmt", "std", "json"] }
 regex = "1.5.5"
 
 [[bin]]

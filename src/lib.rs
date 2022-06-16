@@ -67,17 +67,17 @@ impl IntoU32 for &[u8; 4] {
 impl IpAnalyze for IP {
     fn compute_ip_range(&self) -> (u32, u32) {
         let i = (1u32 << (32 - self.subnet)) - 1;
-        println!(
-            "Subnet number binary representation: {:32}",
-            format!("{:b}", i)
-        );
+        // println!(
+        //     "Subnet number binary representation: {:32}",
+        //     format!("{:b}", i)
+        // );
         let min: u32 = (&self.bytes).into_u32();
         (min & (!i), i ^ min)
     }
 }
 
-pub fn is_ip_fmt(s: &str) -> bool {
-    let re = Regex::new(r"\d+\.\d+\.\d+\.\d+").unwrap();
+pub fn is_ip_range_fmt(s: &str) -> bool {
+    let re = Regex::new(r"\d+\.\d+\.\d+\.\d+/\d+").unwrap();
     re.is_match(s)
 }
 
